@@ -21,3 +21,7 @@ Then launch the Final_Report.ipynb and run through all the cells to view the Rep
   + evaluators.py - The evaluators and evaluation functions used for the project
   + mypytable.py - Our custom table datatype used in our project
 + test_classifiers.py - Unit tests for our Classifiers
++ input_data
+  + breastcancer.csv - Pre-cleaned data
++ output_data
+  + breast_cancer_clean.csv - Cleaned data
