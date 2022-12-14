@@ -1,6 +1,6 @@
 """test_classifier.py
-@author Commander-Cross
-Michael Waight
+@author aphollier, Commander-Cross
+Alexander Hollier and Michael Waight
 """
 from mysklearn import classifier_utils
 import numpy as np # use numpy's random number generation

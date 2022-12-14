@@ -5,9 +5,7 @@ Alexander Hollier and Michael Waight
 from mysklearn import classifier_utils
 import math
 
-##############################################################
-# KNEIGHBORS CLASSIFIER
-##############################################################
+
 class MyKNeighborsClassifier:
     """Represents a simple k nearest neighbors classifier.
     Attributes:
@@ -105,9 +103,6 @@ class MyKNeighborsClassifier:
         return y_predicted
 
 
-##############################################################
-# DUMMY CLASSIFIER
-##############################################################
 class MyDummyClassifier:
     """Represents a "dummy" classifier using the "most_frequent" strategy.
         The most_frequent strategy is a Zero-R classifier, meaning it ignores
@@ -157,9 +152,6 @@ class MyDummyClassifier:
         return y_predicted
 
 
-##############################################################
-# NAIVE BAYES CLASSIFIER
-##############################################################
 class MyNaiveBayesClassifier:
     """Represents a Naive Bayes classifier.
     Attributes:
@@ -244,9 +236,6 @@ class MyNaiveBayesClassifier:
         return y_predicted
 
 
-##############################################################
-# Decision Tree Classifier
-##############################################################
 class MyDecisionTreeClassifier:
     """Represents a decision tree classifier.
     Attributes:
@@ -333,9 +322,6 @@ class MyDecisionTreeClassifier:
         # Call recursive function
         classifier_utils.find_rule(self, self.tree, "", attribute_names, class_name)
 
-##############################################################
-# Random Forest Classifier
-##############################################################
 class MyRandomForestClassifier:
     """
     Represents a Random Forest Classifier
@@ -383,12 +369,10 @@ class MyRandomForestClassifier:
         for i in range(self.N):
             train, test = classifier_utils.compute_bootstrapped_sample(self.remainder_set)
             test_list.append(test)
-            # Build string of arbitrary attribute names
             available_attributes = []
             for i in range(len(train[0]) - 1):
                 available_attributes.append("att" + str(i))
             header = available_attributes.copy()
-            # Build dictionary of attribute domains
             attribute_domains = {}
             for i in range(len(train[0])-1):
                 attribute_domains["att" + str(i)] = []
@@ -398,7 +382,6 @@ class MyRandomForestClassifier:
             for k in attribute_domains.keys():
                 attribute_domains[k] = sorted(attribute_domains[k])
 
-            # Call TDIDT
             tree = classifier_utils.tdidtforest(self, train, available_attributes, attribute_domains, header)
             tree_list.append(tree)
         self.rand_forest = classifier_utils.prune_rand_forest(tree_list, test_list, self.M)
