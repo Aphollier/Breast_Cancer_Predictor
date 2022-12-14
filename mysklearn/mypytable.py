@@ -1,4 +1,4 @@
-from classifier_models import classifier_utils
+from mysklearn import classifier_utils
 import copy
 import csv
 from multiprocessing.sharedctypes import Value

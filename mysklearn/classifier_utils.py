@@ -5,8 +5,8 @@ Alexander Hollier and Michael Waight
 import numpy as np
 import operator
 # Need bootstrap_sample for random forest clf
-from classifier_models import evaluators as eval
-from classifier_models import classifiers as clf
+from mysklearn import evaluators as eval
+from mysklearn import classifiers as clf
 
 def most_frequent(arr):
     """Finds the most common value in a list

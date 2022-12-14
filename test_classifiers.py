@@ -4,7 +4,7 @@ Alexander Hollier and Michael Waight
 """
 import numpy as np
 
-from classifier_models.classifiers import MyNaiveBayesClassifier,\
+from mysklearn.classifiers import MyNaiveBayesClassifier,\
     MyKNeighborsClassifier,\
     MyDummyClassifier,\
     MyDecisionTreeClassifier,\

@@ -2,7 +2,7 @@
 @author Commander-Cross
 Michael Waight
 """
-from classifier_models import classifier_utils
+from mysklearn import classifier_utils
 import numpy as np # use numpy's random number generation
 
 def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True):

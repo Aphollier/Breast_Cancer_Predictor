@@ -2,7 +2,7 @@
 @author aphollier, Commander-Cross
 Alexander Hollier and Michael Waight
 """
-from classifier_models import classifier_utils
+from mysklearn import classifier_utils
 import math
 
 ##############################################################
