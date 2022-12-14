@@ -1,9 +1,6 @@
 from mysklearn import classifier_utils
 import copy
 import csv
-from multiprocessing.sharedctypes import Value
-from operator import index, truediv
-from typing_extensions import Self
 from tabulate import tabulate 
 # uncomment if you want to use the pretty_print() method
 # install tabulate with: pip install tabulate
