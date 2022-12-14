@@ -7,7 +7,8 @@ a dataset of Breast Cancer Data and by utilizing different Classifiers.
 To run the project, you will need to make sure you have a conda kernel and have pip install the two prerequisites listed:
 <li> numpy
 <li> tabulate
-
+<li> matplotlib
+  
 Then launch the Final_Report.ipynb and run through all the cells to view the Report and at the bottom of the Report you will be able to run each classifier with your own test data
 
 ## Organization
