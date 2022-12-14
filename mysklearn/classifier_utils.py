@@ -7,6 +7,7 @@ import operator
 # Need bootstrap_sample for random forest clf
 from mysklearn import evaluators as eval
 from mysklearn import classifiers as clf
+import  matplotlib.pyplot as plt
 
 def most_frequent(arr):
     """Finds the most common value in a list
@@ -546,13 +547,16 @@ def tdidt(self, cur_instance, available_attributes, attribute_domains):
                 class_partition.append(value[-1])
             value_subtree.append(["Leaf", find_majority_1D(class_partition), len(att_partition), len(cur_instance)])
         elif len(att_partition) == 0:
-            # Case 3: Empty partition, backtrack
-            majority_class = max(class_frequency, key=operator.itemgetter(1))
-            class_count_total = sum(class_tuple[1] for class_tuple in class_frequency)
-            tree = ["Leaf", majority_class[0], majority_class[1], class_count_total]
+            # Case 3: Empty partition, backtrack  
+            return False
         else:
             # Recurse
             subtree = tdidt(self, att_partition, available_attributes.copy(), attribute_domains.copy())
+            if subtree is False:
+                class_partition = []
+                for value in att_partition:
+                    class_partition.append(value[-1])
+                subtree = ["Leaf", find_majority_1D(class_partition), len(att_partition), len(cur_instance)]
             value_subtree.append(subtree)
 
         tree.append(value_subtree)
@@ -723,12 +727,15 @@ def tdidtforest(self, cur_instance, available_attributes, attribute_domains, hea
             value_subtree.append(["Leaf", find_majority_1D(class_partition), len(att_partition), len(cur_instance)])
         elif len(att_partition) == 0:
             # Case 3: Empty partition, backtrack
-            majority_class = max(class_frequency, key=operator.itemgetter(1))
-            class_count_total = sum(class_tuple[1] for class_tuple in class_frequency)
-            tree = ["Leaf", majority_class[0], majority_class[1], class_count_total]
+            return False
         else:
             # Recurse
             subtree = tdidtforest(self, att_partition, available_attributes.copy(), attribute_domains.copy(), header)
+            if subtree is False:
+                class_partition = []
+                for value in att_partition:
+                    class_partition.append(value[-1])
+                subtree = ["Leaf", find_majority_1D(class_partition), len(att_partition), len(cur_instance)]
             value_subtree.append(subtree)
 
         tree.append(value_subtree)
@@ -789,3 +796,132 @@ def find_forest_prediction(tree_list, test_instance):
     for tree in tree_list:
         count.append(find_tree_prediction(tree, test_instance))
     return most_frequent(count)
+
+def return_counts(data):
+    """Returns the counts of Each unique value in the List Given
+
+    Args:
+        data(list of list of objs): A list of instances
+    Returns:
+        Types(List of str): the unique values in the data
+        Counts(List of int): the frequency of each value in parallel
+    """
+    types = []
+    counts = []
+
+    for i in data: 
+        if i not in types:
+            types.append(i)
+            counts.append(0)
+
+    for j in range(len(types)):
+        for i in data:
+            if i == types[j]:
+                counts[j] += 1
+    return types, counts
+
+
+def barcharty(labels, counts, title):
+    """ Creates Bar Charts
+    Args:
+        labels(list of str): Names of each category
+        counts(list of int): Frequency of each category
+        title(str): Title of Chart
+    """
+    plt.bar(labels, counts)
+    plt.title(title, fontsize=14)
+    plt.xticks(rotation=30, ha='right')
+    plt.show()
+
+def y_clean(y):
+    """ Cleans our Y data into Negative, Benign or Needs Additional Imaging
+    Args:
+        y(list of str): Y data
+    Returns:
+        y(list of str): Y data Cleaned into those 3 Categories
+    
+    """
+    accepted = ["Negative", "Benign findings"]
+    for i in range(len(y)):
+        if y[i] not in accepted:
+            y[i] = "Needs additional imaging"
+    return y
+            
+def histogramy(data, title, xlab):
+    """ Creates Histogram Charts
+    Args:
+        data(list of Int): Data to plot
+        title(str): Title of Chart
+        xlab(str): name of data passed in
+    """
+    plt.title(title, fontsize=14)
+    plt.hist(data,15, density=1)
+    plt.xlabel(xlab)
+    plt.ylabel("Counts")
+    plt.show()
+
+def piecharty(labels, sizes, lab):
+    """ Creates Bar Charts
+    Args:
+        labels(list of str): Names of each category
+        sizes(list of int): Frequency of each category
+    """
+    plt.subplots(figsize = (7,5))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%',
+            shadow=True, startangle=90)
+    plt.title(lab)
+    plt.axis('equal') 
+
+    plt.show()
+
+def splity(X, y, label):
+    """ Splits our information for negative, benign and needs more imaging
+    Args:
+        X(list of str): The data for each category
+        y(list of str): The category it is in
+        label(str): Title of Chart
+    """
+    negative_x = []
+    benign_x = []
+    other_x = []
+    for i in range(len(y)):
+        if y[i] == "Negative":
+            negative_x.append(X[i])
+        if y[i] == "Benign findings":
+            benign_x.append(X[i])
+        if y[i] == "Needs additional imaging":
+            other_x.append(X[i])
+
+    labels, sizes = return_counts(negative_x)
+    piecharty(labels, sizes, "Negative " + label)
+
+    labels, sizes = return_counts(benign_x)
+    piecharty(labels, sizes, "Benign " + label)
+
+    labels, sizes = return_counts(other_x)
+    piecharty(labels, sizes, "Needs More Imaging " + label)
+
+def histogram_splits(X, y, label, xlab):
+    """ Splits our information for negative, benign and needs more imaging
+    Args:
+        X(list of str): The data for each category
+        y(list of str): The category it is in
+        label(str): title of chart
+        xlab(str): name of information
+    """
+    negative_x = []
+    benign_x = []
+    other_x = []
+    for i in range(len(y)):
+        if y[i] == "Negative":
+            negative_x.append(X[i])
+        if y[i] == "Benign findings":
+            benign_x.append(X[i])
+        if y[i] == "Needs additional imaging":
+            other_x.append(X[i])
+
+    histogramy(negative_x, "Negative " + label, xlab)
+
+    histogramy(benign_x, "Benign " + label, xlab)
+
+    histogramy(other_x, "Needs More Imaging " + label, xlab)

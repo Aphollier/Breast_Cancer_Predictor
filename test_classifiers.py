@@ -417,5 +417,3 @@ def test_decision_tree_classifier_predict():
         ["Mid", "Python", "yes", "yes",], ["Junior", "R", "yes", "no"]])
     rnf_sol = ["True", "False", "True", "True"]
     assert rnf_predict == rnf_sol
-
-test_random_forest_classifier_fit()

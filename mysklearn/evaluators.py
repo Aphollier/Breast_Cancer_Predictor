@@ -188,6 +188,51 @@ def bootstrap_sample(X, y=None, n_samples=None, random_state=None):
 
     return X_sample, X_out_of_bag, y_sample, y_out_of_bag
 
+def bootstrap_sample_stratified(X, y, random_state=None):
+    """Split dataset into a stratified bootstrapped training set and out of bag test set.
+
+    Args:
+        X(list of list of obj): The list of samples
+        y(list of obj): The target y values (parallel to X)
+            Default is None (in this case, the calling code only wants to sample X)
+        random_state(int): integer used for seeding a random number generator for reproducible results
+
+    Returns:
+        X_sample(list of list of obj): The list of samples
+        X_out_of_bag(list of list of obj): The list of "out of bag" samples (e.g. left-over samples)
+        y_sample(list of obj): The list of target y values sampled (parallel to X_sample)
+            None if y is None
+        y_out_of_bag(list of obj): The list of target y values "out of bag" (parallel to X_out_of_bag)
+            None if y is None
+    """
+
+    if random_state is not None:
+        np.random.seed(random_state)
+
+    # Split by class attribute
+    split_ind = {}
+    for i in range(len(X)):
+        if y[i] in split_ind:
+            split_ind[y[i]].append(i)
+        else:
+            split_ind[y[i]] = [i]
+
+    # Get sample indexes
+    X_sample = []
+    y_sample = []
+    X_out_of_bag = []
+    y_out_of_bag = []
+    for splits in list(split_ind.values()):
+        n = len(splits)
+        sampled_indexes = [np.random.randint(0, n) for _ in range(n)]
+        X_sample.extend([X[splits[index]] for index in sampled_indexes])
+        y_sample.extend([y[splits[index]] for index in sampled_indexes])
+        out_of_bag_indexes = [index for index in list(range(n)) if index not in sampled_indexes]
+        X_out_of_bag.extend([X[splits[index]] for index in out_of_bag_indexes])
+        y_out_of_bag.extend([y[splits[index]] for index in out_of_bag_indexes])
+
+    return X_sample, X_out_of_bag, y_sample, y_out_of_bag
+
 def confusion_matrix(y_true, y_pred, labels):
     """Compute confusion matrix to evaluate the accuracy of a classification.
 
